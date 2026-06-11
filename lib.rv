@@ -1,0 +1,92 @@
+// raven-validate: collect validation errors over a set of fields.
+//
+//     import "github.com/martian56/raven-validate" { Validator }
+//
+//     let v = Validator.new()
+//     v.required("name", name)
+//     v.min_len("name", name, 2)
+//     v.email("email", email)
+//     if v.is_valid() { save() } else { print(v.errors()) }
+//
+// Each rule adds a message when it fails. The validator keeps going so you can
+// show every problem at once instead of one at a time. The rule methods also
+// return the validator, so you can chain them if you prefer.
+
+import std/string
+
+struct Validator {
+    errors: List<String>,
+}
+
+impl Validator {
+    fun new() -> Validator {
+        let e: List<String> = []
+        return Validator { errors: e }
+    }
+
+    // A free-form check: records `message` when `ok` is false.
+    fun check(self, ok: Bool, message: String) -> Validator {
+        if !ok {
+            self.errors.push(message)
+        }
+        return self
+    }
+
+    // `value` must not be empty.
+    fun required(self, field: String, value: String) -> Validator {
+        return self.check(value != "", "${field} is required")
+    }
+
+    // `value` must be at least `n` characters.
+    fun min_len(self, field: String, value: String, n: Int) -> Validator {
+        return self.check(value.length() >= n, "${field} must be at least ${n.to_string()} characters")
+    }
+
+    // `value` must be at most `n` characters.
+    fun max_len(self, field: String, value: String, n: Int) -> Validator {
+        return self.check(value.length() <= n, "${field} must be at most ${n.to_string()} characters")
+    }
+
+    // `value` must look like an email address (a basic shape check).
+    fun email(self, field: String, value: String) -> Validator {
+        let at = value.index_of("@")
+        let dot = value.index_of(".")
+        let ok = at > 0 && dot > at && !value.ends_with(".")
+        return self.check(ok, "${field} is not a valid email")
+    }
+
+    // `value` must be one of `options`.
+    fun one_of(self, field: String, value: String, options: List<String>) -> Validator {
+        let i = 0
+        let found = false
+        while i < options.len() {
+            if options[i] == value {
+                found = true
+            }
+            i += 1
+        }
+        return self.check(found, "${field} is not an allowed value")
+    }
+
+    // An integer `value` must be between `lo` and `hi` inclusive.
+    fun in_range(self, field: String, value: Int, lo: Int, hi: Int) -> Validator {
+        let ok = value >= lo && value <= hi
+        return self.check(ok, "${field} must be between ${lo.to_string()} and ${hi.to_string()}")
+    }
+
+    fun is_valid(self) -> Bool {
+        return self.errors.len() == 0
+    }
+
+    fun errors(self) -> List<String> {
+        return self.errors
+    }
+
+    // The first error, or `None` when everything passed.
+    fun first_error(self) -> Option<String> {
+        if self.errors.len() == 0 {
+            return None
+        }
+        return Some(self.errors[0])
+    }
+}

@@ -1,0 +1,22 @@
+// Build and run: raven build demo.rv -o demo && ./demo
+import std/io { println }
+import std/string
+import "./lib" { Validator }
+
+fun main() {
+    let v = Validator.new()
+    v.required("name", "")
+    v.email("email", "not-an-email")
+    v.in_range("age", 200, 0, 120)
+    if v.is_valid() {
+        println("all good")
+    } else {
+        println("validation failed:")
+        let errs = v.errors()
+        let i = 0
+        while i < errs.len() {
+            println("  - ".concat(errs[i]))
+            i += 1
+        }
+    }
+}

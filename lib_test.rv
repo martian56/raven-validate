@@ -1,0 +1,62 @@
+import std/string
+import std/test { assert_true, assert_false, assert_eq_int, assert_msg }
+import "./lib" { Validator }
+
+fun test_all_pass() {
+    let v = Validator.new()
+    v.required("name", "Alice")
+    v.min_len("name", "Alice", 2)
+    v.email("email", "a@b.com")
+    assert_true(v.is_valid())
+    assert_eq_int(v.errors().len(), 0)
+}
+
+fun test_collects_multiple_errors() {
+    let v = Validator.new()
+    v.required("name", "")
+    v.min_len("name", "", 2)
+    v.email("email", "nope")
+    assert_false(v.is_valid())
+    assert_eq_int(v.errors().len(), 3)
+}
+
+fun test_required_message() {
+    let v = Validator.new()
+    v.required("name", "")
+    match v.first_error() {
+        Some(e) -> assert_true(e.contains("required")),
+        None -> assert_msg(false, "expected an error"),
+    }
+}
+
+fun test_chaining_style() {
+    let v = Validator.new().required("x", "v").min_len("x", "v", 1)
+    assert_true(v.is_valid())
+}
+
+fun test_email() {
+    let good = Validator.new()
+    good.email("e", "user@example.com")
+    assert_true(good.is_valid())
+    let bad = Validator.new()
+    bad.email("e", "user@nodot")
+    assert_false(bad.is_valid())
+}
+
+fun test_one_of() {
+    let v = Validator.new()
+    v.one_of("role", "admin", ["user", "admin", "guest"])
+    assert_true(v.is_valid())
+    let bad = Validator.new()
+    bad.one_of("role", "root", ["user", "admin"])
+    assert_false(bad.is_valid())
+}
+
+fun test_in_range() {
+    let v = Validator.new()
+    v.in_range("age", 30, 1, 120)
+    assert_true(v.is_valid())
+    let bad = Validator.new()
+    bad.in_range("age", 200, 1, 120)
+    assert_false(bad.is_valid())
+}
