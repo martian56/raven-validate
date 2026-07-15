@@ -1,5 +1,7 @@
 # raven-validate
 
+[![CI](https://github.com/martian56/raven-validate/actions/workflows/ci.yml/badge.svg)](https://github.com/martian56/raven-validate/actions/workflows/ci.yml)
+
 Field validation that collects every problem instead of stopping at the first.
 You make a `Validator`, run your checks against it, then ask whether it passed.
 No dependencies.
@@ -8,12 +10,12 @@ No dependencies.
 
 ```toml
 [dependencies]
-"github.com/martian56/raven-validate" = "0.1"
+"github.com/martian56/raven-validate" = "v0.1.0"
 ```
 
 ## Usage
 
-```raven
+```rust
 import "github.com/martian56/raven-validate" { Validator }
 
 fun check_signup(name: String, email: String, age: Int) -> Bool {
@@ -34,7 +36,7 @@ fun check_signup(name: String, email: String, age: Int) -> Bool {
 The rule methods also return the validator, so chaining works if you'd rather
 write it that way:
 
-```raven
+```rust
 let v = Validator.new().required("name", name).email("email", email)
 ```
 

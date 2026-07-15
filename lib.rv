@@ -39,12 +39,18 @@ impl Validator {
 
     // `value` must be at least `n` characters.
     fun min_len(self, field: String, value: String, n: Int) -> Validator {
-        return self.check(value.length() >= n, "${field} must be at least ${n.to_string()} characters")
+        return self.check(
+            value.length() >= n,
+            "${field} must be at least ${n.to_string()} characters",
+        )
     }
 
     // `value` must be at most `n` characters.
     fun max_len(self, field: String, value: String, n: Int) -> Validator {
-        return self.check(value.length() <= n, "${field} must be at most ${n.to_string()} characters")
+        return self.check(
+            value.length() <= n,
+            "${field} must be at most ${n.to_string()} characters",
+        )
     }
 
     // `value` must look like an email address (a basic shape check).
