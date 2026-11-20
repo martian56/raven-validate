@@ -1,6 +1,6 @@
 [package]
 name = "raven-validate"
 version = "0.1.0"
-edition = "v2"
+edition = "v3"
 
 [dependencies]
