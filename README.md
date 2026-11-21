@@ -10,7 +10,7 @@ No dependencies.
 
 ```toml
 [dependencies]
-"github.com/martian56/raven-validate" = "v0.1.0"
+"github.com/martian56/raven-validate" = "v0.2.0"
 ```
 
 ## Usage
