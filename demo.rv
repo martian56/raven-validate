@@ -1,7 +1,7 @@
-// Build and run: raven build demo.rv -o demo && ./demo
-import std/io { println }
-import std/string
-import "./lib" { Validator }
+// Build and run: raven build demo.rv -o demo and ./demo
+from std.io import println
+import std.string
+from "./lib" import Validator
 
 fun main() {
     let v = Validator.new()
@@ -13,7 +13,7 @@ fun main() {
     } else {
         println("validation failed:")
         let errs = v.errors()
-        let i = 0
+        var i = 0
         while i < errs.len() {
             println("  - ".concat(errs[i]))
             i += 1

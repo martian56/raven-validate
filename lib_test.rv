@@ -1,6 +1,6 @@
-import std/string
-import std/test { assert_true, assert_false, assert_eq_int, assert_msg }
-import "./lib" { Validator }
+import std.string
+from std.test import assert_true, assert_false, assert_eq_int, assert_msg
+from "./lib" import Validator
 
 fun test_all_pass() {
     let v = Validator.new()
@@ -24,8 +24,8 @@ fun test_required_message() {
     let v = Validator.new()
     v.required("name", "")
     match v.first_error() {
-        Some(e) -> assert_true(e.contains("required")),
-        None -> assert_msg(false, "expected an error"),
+        case Some(e) { assert_true(e.contains("required")) }
+        case None { assert_msg(false, "expected an error") }
     }
 }
 

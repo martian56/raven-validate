@@ -10,15 +10,15 @@ No dependencies.
 
 ```toml
 [dependencies]
-"github.com/martian56/raven-validate" = "v0.1.0"
+"github.com/martian56/raven-validate" = "v0.2.0"
 ```
 
 ## Usage
 
 ```rust
-import "github.com/martian56/raven-validate" { Validator }
+from "github.com/martian56/raven-validate" import Validator
 
-fun check_signup(name: String, email: String, age: Int) -> Bool {
+fun check_signup(name: str, email: str, age: int) -> bool {
     let v = Validator.new()
     v.required("name", name)
     v.min_len("name", name, 2)
@@ -49,7 +49,7 @@ let v = Validator.new().required("name", name).email("email", email)
 | `max_len(field, value, n)` | `value` is at most `n` characters |
 | `email(field, value)` | `value` has the shape of an email |
 | `one_of(field, value, options)` | `value` is in `options` |
-| `in_range(field, value, lo, hi)` | the `Int` `value` is within `[lo, hi]` |
+| `in_range(field, value, lo, hi)` | the `int` `value` is within `[lo, hi]` |
 | `check(ok, message)` | `ok` is true (for a rule of your own) |
 
 The `field` name goes into the message, so you get things like `name is
@@ -58,7 +58,7 @@ required` or `age must be between 13 and 120`.
 ## Reading the result
 
 `is_valid()` is the quick yes or no. `errors()` is the full list of messages,
-and `first_error()` is the first one as an `Option<String>`.
+and `first_error()` is the first one as an `Option[str]`.
 
 ## License
 
